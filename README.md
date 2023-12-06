@@ -10,13 +10,13 @@ Below are the environments currently available;
 - [Node.js](./setup-nodejs.sh) : 
   Run this script to setup an envirnoment with an IDE, git, browser, node.js, package manager and your favorite framework cli
   ```sh
-  curl https://raw.githubusercontent.com/henryhale/webenv/setup-nodejs.sh | bash
+  curl https://raw.githubusercontent.com/henryhale/webenv/master/setup-nodejs.sh | bash
   ```
 
 - [LAMP stack](./setup-lamp.sh) : 
   Setup a PHP based enviroment with php, composer, database server and phpmyadmin
   ```sh
-  curl https://raw.githubusercontent.com/henryhale/webenv/setup-lamp.sh | bash
+  curl https://raw.githubusercontent.com/henryhale/webenv/master/setup-lamp.sh | bash
   ```
 
 ## issues
