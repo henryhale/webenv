@@ -10,7 +10,7 @@ function check_privileges() {
     if [ "$EUID" -ne 0 ]; then
         echo "[x] This command often requires sudo privileges."
         read -p "Do you want to continue without sudo? (y/n) " confirm
-        if $confirm != "y"; then
+        if ["$confirm" != "y"]; then
             echo "[x] Please run the script with sudo."
             exit 1
         fi
