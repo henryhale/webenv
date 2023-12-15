@@ -1,50 +1,35 @@
 #!/bin/bash
 
-# Function to check if a command is available
-function command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
+# Use local common.bash script in development with `--local` argument
+if [ "$1" == "--local" ]; then
+    echo -e "************ DEV ************\n :- Running in development mode"
+else 
+    # Download the common variables and functions script from the GitHub repository
+    curl -O https://raw.githubusercontent.com/henryhale/webenv/master/common.bash
+fi
 
-# Function to check if running with sudo
-function check_privileges() {
-    if [ "$EUID" -ne 0 ]; then
-        echo "[x] This command often requires sudo privileges."
-        read -p "Do you want to continue without sudo? (y/n) " confirm
-        if [ "$confirm" != "y" ]; then
-            echo "[x] Please run the script with sudo."
-            exit 1
-        fi
-    fi
-}
+# Make the common functions script executable
+chmod +x common.bash
 
-# Function to install a package if it's not already installed
-function install_package() {
-    if ! command_exists "$1"; then
-        # Check if running with sudo
-        check_privileges
-        # install package
-        echo "[-] Installing $1 ..."
-        sudo apt-get install -y "$1"
-    else
-        echo "[-] $1 is already installed."
-    fi
-}
+# Source the common functions script
+source common.bash
 
 # Function to install Node.js using NVM (Node Version Manager)
 function install_nodejs() {
+    echo -e "\n[#] Install Node.js"
     # Check if running with sudo
     check_privileges
     # Install curl if not installed
     install_package "curl"
     # Check if NVM is installed
     if ! command_exists "nvm"; then
-        echo "[-] Installing NVM..."
+        echo "[+] Installing NVM..."
         # Install NVM
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
         # Activate NVM (or restart the terminal)
         source ~/.bashrc
     fi
-    echo "[-] Installing the latest Node.js version..."
+    echo "[+] Installing the latest Node.js version..."
     # Install the latest Node.js version
     nvm install node
     nvm use node
@@ -55,144 +40,108 @@ function install_nodejs() {
     fi
 }
 
+# Function to install Node.js package manager
+function install_nodejs_package_manager() {
+    echo -e "\n[#] Choose a Node.js package manager:"
+    PS3="Enter the number corresponding to your choice: "
+    package_managers=(npm yarn pnpm)
+    select pkg_manager in "${package_managers[@]}";
+    do
+        case $pkg_manager in
+            "npm" )
+                npm -g npm@latest
+                npm -v
+                break
+            ;;
+            "yarn" )
+                npm install -g yarn
+                yarn -v
+                break
+            ;;
+            "pnpm" )
+                npm install -g pnpm
+                pnpm -v
+                pnpm setup
+                break
+            ;;
+            * )
+                echo "[x] Invalid option."
+                echo " -  Taking npm as default Node.js package manager"
+                pkg_manager="npm"
+            ;;
+        esac
+    done
+}
+
+# Function to install web framework cli tool
+function install_web_framework() {
+    echo -e "\n[#] Choose a web development framework:"
+    PS3="Enter the number corresponding to your choice: "
+    frameworks=(Vite React Angular Vue)
+    select framework in "${frameworks[@]}";
+    do
+        case $framework in
+            "Vite" )
+                echo "[+] Installing vite globally..."
+                $pkg_manager install -g vite
+                break
+            ;;
+            "React" )
+                echo "[+] Installing create-react-app globally..."
+                $pkg_manager install -g create-react-app
+                break
+            ;;
+            "Angular" )
+                echo "[+] Installing @angular/cli globally..."
+                $pkg_manager install -g @angular/cli
+                break
+            ;;
+            "Vue" )
+                echo "[+] Installing @vue/cli globally..."
+                $pkg_manager install -g @vue/cli
+                break
+            ;;
+            * )
+                echo "[x] Invalid option"
+            ;;
+        esac
+    done
+
+    # Check if the selected framework is installed successfully
+    if [ "$framework" ]; then
+        if ! command_exists "$framework"; then
+            echo "[x] $framework installation failed. Please check for errors and try again."
+            exit 1
+        fi
+    fi
+}
+
 # Start installation
-echo -e "               _                     
- __      _____| |__   ___ _ ____   __
- \ \ /\ / / _ \ '_ \ / _ \ '_ \ \ / /
-  \ V  V /  __/ |_) |  __/ | | \ V / 
-   \_/\_/ \___|_.__/ \___|_| |_|\_/  
-                                     "
+echo -e "$intro_message"
 
 echo "Node.js Development Environment Setup"
 
-# Prompt user to select IDE
-echo "[1] Choose an IDE:"
-PS3="Enter the number corresponding to your choice: "
-options=("Vim" "Neovim" "VSCode" "Atom" "Sublime Text")
-select ide in "${options[@]}"; 
-do
-    case $ide in
-        "Vim" )
-            install_package "vim"
-            break
-        ;;
-        "Neovim" )
-            install_package "neovim"
-            break
-        ;;
-        "VSCode" )
-            install_package "code"
-            break
-        ;;
-        "Atom" )
-            install_package "atom"
-            break
-        ;;
-        "Sublime Text" )
-            install_package "sublime-text"
-            break
-        ;;
-        * )
-            echo "[x] Invalid option"
-        ;;
-    esac
-done
+# Install IDE
+install_ide
 
-# Prompt user to select a web browser
-echo -e "\n[2] Choose a web browser:"
-PS3="Enter the number corresponding to your choice: "
-browsers=(Chrome Firefox)
-select browser in "${browsers[@]}"; 
-do
-    case $browser in
-        "Chrome" )
-            install_package "google-chrome-stable"
-            break
-        ;;
-        "Firefox" )
-            install_package "firefox"
-            break
-        ;;
-        * )
-            echo "[x] Invalid option"
-        ;;
-    esac
-done
+# Install Web browser
+install_web_browser
 
-# Check if Git is installed successfully
-echo -e "\n[3] Install Git"
-install_package "git"
+# Install Git (Source Control)
+install_git
 
-# Install Node.js and npm
-echo -e "\n[4] Install Node.js and npm"
+# Install Node.js
 install_nodejs
 
-# Prompt user to select Node.js package manager
-echo -e "\n[5] Choose a Node.js package manager:"
-PS3="Enter the number corresponding to your choice: "
-package_managers=(npm yarn pnpm)
-select pkg_manager in "${package_managers[@]}";
-do
-    case $pkg_manager in
-        "npm" )
-            npm -g npm@latest
-            break
-        ;;
-        "yarn" )
-            npm install -g yarn
-            break
-        ;;
-        "pnpm" )
-            npm install -g pnpm && pnpm -v && pnpm setup
-            break
-        ;;
-        * )
-            echo "[x] Invalid option."
-            echo " -  Taking npm as default Node.js package manager"
-            pkg_manager="npm"
-        ;;
-    esac
-done
+# Install Package manager
+install_nodejs_package_manager
 
-# Install a web development framework (e.g. React)
-echo -e "\n[6] Choose a web development framework:"
-PS3="Enter the number corresponding to your choice: "
-frameworks=(Vite React Angular Vue)
-select framework in "${frameworks[@]}";
-do
-    case $framework in
-        "Vite" )
-            echo "[-] Installing vite globally..."
-            $pkg_manager install -g vite
-            break
-        ;;
-        "React" )
-            echo "[-] Installing create-react-app globally..."
-            $pkg_manager install -g create-react-app
-            break
-        ;;
-        "Angular" )
-            echo "[-] Installing @angular/cli globally..."
-            $pkg_manager install -g @angular/cli
-            break
-        ;;
-        "Vue" )
-            echo "[-] Installing @vue/cli globally..."
-            $pkg_manager install -g @vue/cli
-            break
-        ;;
-        * )
-            echo "[x] Invalid option"
-        ;;
-    esac
-done
+# Install a web dev framework cli (e.g. vite, create-react-app, ...)
+install_web_framework
 
-# Check if the selected framework is installed successfully
-if [ "$framework" ]; then
-    if ! command_exists "$framework"; then
-        echo "[x] $framework installation failed. Please check for errors and try again."
-        exit 1
-    fi
+# Clean up
+if [ "$1" != "--local" ]; then
+    rm -rf common.bash
 fi
 
 echo "[-] Node.js development environment setup complete."
