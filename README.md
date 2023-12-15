@@ -24,7 +24,7 @@ Below are the environments currently available;
   ```
 
 - [XAMPP](./setup-xampp.bash) : 
-  Setup a PHP based enviroment with XAMPP from Apache Friends containing php, mysql, mariadb, perl, apache, ftp server, phpmyadmin
+  Setup a pre-configured PHP based enviroment with XAMPP from Apache Friends containing php, mysql, mariadb, perl, apache, ftp server, phpmyadmin
   ```sh
   curl -O https://raw.githubusercontent.com/henryhale/webenv/master/setup-xampp.bash
   bash setup-xampp.bash
