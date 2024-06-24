@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 # Use local common.bash script in development with `--local` argument
 if [ "$1" == "--local" ]; then

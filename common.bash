@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 # Welcome message
 intro_message="
