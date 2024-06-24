@@ -19,10 +19,10 @@ function install_xampp() {
     # Check if running with sudo
     check_privileges
     # Prompt for PHP version
-    php_versions=("PHP 7.4" "PHP 8.1" "PHP 8.2")
-    version_number=""
+    local php_versions=("PHP 7.4" "PHP 8.1" "PHP 8.2")
+    local version_number=""
     echo -e "\n[#] Choose a PHP version:"
-    PS3="Enter the number corresponding to your choice: "
+    local PS3="Enter the number corresponding to your choice: "
     select php_version in "${php_versions[@]}"; do
         case $php_version in
             "PHP 7.4" )

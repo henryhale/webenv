@@ -43,8 +43,8 @@ function install_nodejs() {
 # Function to install Node.js package manager
 function install_nodejs_package_manager() {
     echo -e "\n[#] Choose a Node.js package manager:"
-    PS3="Enter the number corresponding to your choice: "
-    package_managers=(npm yarn pnpm)
+    local PS3="Enter the number corresponding to your choice: "
+    local package_managers=(npm yarn pnpm)
     select pkg_manager in "${package_managers[@]}";
     do
         case $pkg_manager in
@@ -76,8 +76,8 @@ function install_nodejs_package_manager() {
 # Function to install web framework cli tool
 function install_web_framework() {
     echo -e "\n[#] Choose a web development framework:"
-    PS3="Enter the number corresponding to your choice: "
-    frameworks=(Vite React Angular Vue)
+    local PS3="Enter the number corresponding to your choice: "
+    local frameworks=(Vite React Angular Vue)
     select framework in "${frameworks[@]}";
     do
         case $framework in

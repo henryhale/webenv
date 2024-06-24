@@ -17,9 +17,9 @@ source common.bash
 # Function to install PHP and web server
 function install_php_webserver() {
     echo -e "\n[#] Choose a PHP version:"
-    PS3="Enter the number corresponding to your choice: "
-    php_versions=("PHP 7.4" "PHP 8.1")
-    php_modules=(cli common mysql zip gd mbstring curl xml bcmath)
+    local PS3="Enter the number corresponding to your choice: "
+    local php_versions=("PHP 7.4" "PHP 8.1")
+    local php_modules=(cli common mysql zip gd mbstring curl xml bcmath)
     select php_version in "${php_versions[@]}"; do
         case $php_version in
             "PHP 7.4" )
@@ -39,7 +39,7 @@ function install_php_webserver() {
     done
     echo -e "\n[#] Choose a web server:"
     PS3="Enter the number corresponding to your choice: "
-    webservers=(Nginx Apache Lighttpd)
+    local webservers=(Nginx Apache Lighttpd)
     select webserver in "${webservers[@]}"; do
         case $webserver in
             "Nginx" )
@@ -75,8 +75,8 @@ function install_composer() {
 # Function to install MySQL or MariaDB
 function install_database() {
     echo -e "\n[#] Choose a database server:"
-    PS3="Enter the number corresponding to your choice: "
-    databases=(MySQL MariaDB)
+    local PS3="Enter the number corresponding to your choice: "
+    local databases=(MySQL MariaDB)
     select database in "${databases[@]}"; do
         case $database in
             "MySQL" )
@@ -98,7 +98,7 @@ function install_database() {
 function configure_mysql() {
     echo -e "\n[#] Configuring MySQL..."
     read -p "Enter MySQL user account name (default: root): " mysql_user
-    mysql_user=${mysql_user:-root}
+    local mysql_user=${mysql_user:-root}
     read -sp "Enter MySQL user account password: " mysql_password
     echo
 
