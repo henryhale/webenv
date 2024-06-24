@@ -53,4 +53,4 @@ In case of any issues such as bugs or errors, kindly [open an issue](https://git
 
 Released under [MIT License](./LICENSE.md)
 
-Copyright 2023 [Henry Hale](https://github.com/henryhale)
+Copyright 2023 - Present [Henry Hale](https://github.com/henryhale)
