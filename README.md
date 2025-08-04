@@ -1,6 +1,14 @@
 # webenv
 Setup your web development environment in one command
 
+> [!IMPORTANT]
+>
+> Project archived in favour of modern actively maintained projects that clearly put my original long-term vision way better.
+>
+> - For Linux beginners (GUI): Try Omakub [github](https://github.com/basecamp/omakub) | [website](https://omakub.org/)
+> - For Linux pros (CLI): Try Omarchy [github](https://github.com/basecamp/omarchy) | [website](https://omarchy.org/)
+
+
 ## overview
 Setting up a development environment on your new machine can be hard sometimes. The sole aim of this project is to provide a convenient way of getting the job done with one command.
 
